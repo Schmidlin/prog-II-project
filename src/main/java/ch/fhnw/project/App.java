@@ -1,6 +1,8 @@
 package ch.fhnw.project;
 
 import javafx.application.Application;
+import javafx.scene.Scene;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 import java.util.function.Supplier;
@@ -9,9 +11,12 @@ public final class App extends Application {
 
     @Override
     public void start(Stage stage) {
-        // Asserts correct project setup (will only compile with Java 8)
-        Supplier<String> helloWorldSupplier = () -> "Hello Thoemeli";
-        System.out.println(helloWorldSupplier.get());
+
+
+
+        Scene scene  = new Scene(mainPain, 500, 400);
+        stage.setScene(scene);
+        stage.show();
     }
 
 }
