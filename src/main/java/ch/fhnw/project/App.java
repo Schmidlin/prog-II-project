@@ -1,12 +1,12 @@
 package ch.fhnw.project;
 
 import javafx.application.Application;
+import javafx.scene.Scene;
+import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
-import java.util.function.Supplier;
-import javafx.*;
 
 
 public final class App extends Application {
@@ -43,6 +43,15 @@ public final class App extends Application {
     public void start(Stage stage) {
 
         fileChoose();
+
+
+
+        Pane pane = new Pane();
+        pane = MainPain.getMainPain();
+
+        Scene scene = new Scene(pane);
+        stage.setScene(scene);
+        stage.show();
     }
 
 }
