@@ -3,6 +3,7 @@ package ch.fhnw.project;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -40,18 +41,19 @@ public final class App extends Application {
 }
 
     @Override
-    public void start(Stage stage) {
+    public void start(Stage stage) throws Exception {
 
         fileChoose();
 
 
-
-        Pane pane = new Pane();
-        pane = MainPain.getMainPain();
-
+        StackPane pane = new StackPane(MainPain.getMainPain());
         Scene scene = new Scene(pane);
         stage.setScene(scene);
         stage.show();
     }
 
+    public static void main(String[] args) {
+        launch(args);
+    }
 }
+
