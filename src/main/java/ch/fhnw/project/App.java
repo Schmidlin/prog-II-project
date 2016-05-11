@@ -1,6 +1,8 @@
 package ch.fhnw.project;
 
 import javafx.application.Application;
+import javafx.scene.Scene;
+import javafx.scene.layout.StackPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -53,6 +55,10 @@ public final class App extends Application {
         System.out.println("the size of value-List from first Variable: " + variableList.get(0).getValues().size());
 
 
+        StackPane pane = new StackPane(MainPain.getMainPain());
+        Scene scene = new Scene(pane);
+        stage.setScene(scene);
+        stage.show();
 
     }
 
