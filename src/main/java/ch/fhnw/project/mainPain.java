@@ -16,19 +16,21 @@ public class mainPain {
 
     public static Pane createMainPain(List<Variables> variableList) {
 
-        HBox scatterPlot = new HBox();
-        scatterPlot.getChildren().addAll(ScatterPlot.createScatterPane(variableList));
+        /*HBox scatterPlot = new HBox();
+        scatterPlot.getChildren().add(ScatterPlot.createScatterPane(variableList));
         scatterPlot.setAlignment(Pos.CENTER);
-        scatterPlot.setPadding(new Insets(5, 5, 5, 5));
+        scatterPlot.setStyle("-fx-background-color: yellow;");
+        //scatterPlot.setPadding(new Insets(5, 5, 5, 5));
 
         HBox histogramm = new HBox();
-        histogramm.getChildren().addAll(Histogramm.createHistogramm());
+        histogramm.getChildren().addAll(Histogramm.createHistogramm(variableList));
         histogramm.setAlignment(Pos.CENTER);
-        histogramm.setPadding(new Insets(5, 5, 5, 5));
-        histogramm.setStyle("-fx-background-color: red;");
+        histogramm.setPadding(new Insets(5, 5, 5, 5));*/
 
         VBox mainHBox = new VBox();
-        mainHBox.getChildren().addAll(scatterPlot,histogramm);
+        mainHBox.getChildren().addAll(ScatterPlot.createScatterPane(variableList),Histogramm.createHistogramm(variableList));
+        mainHBox.setPadding(new Insets(5, 5, 5, 5));
+        mainHBox.setSpacing(10);
 
         StackPane mainPain = new StackPane();
         mainPain.getChildren().addAll(mainHBox);
