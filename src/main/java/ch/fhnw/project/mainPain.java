@@ -12,16 +12,15 @@ import javafx.scene.layout.VBox;
  */
 public class MainPain {
 
-    public static Pane getMainPain () {
+    public static Pane createMainPain() {
 
         HBox scatterPlot = new HBox();
         scatterPlot.getChildren().addAll(ScatterPlot.createScatterPane());
         scatterPlot.setAlignment(Pos.CENTER);
         scatterPlot.setPadding(new Insets(5, 5, 5, 5));
-        scatterPlot.setStyle("-fx-background-color: cornflowerblue;");
 
         HBox histogramm = new HBox();
-        //histogramm.getChildren().addAll();
+        histogramm.getChildren().addAll(Histogramm.createHistogramm());
         histogramm.setAlignment(Pos.CENTER);
         histogramm.setPadding(new Insets(5, 5, 5, 5));
         histogramm.setStyle("-fx-background-color: red;");

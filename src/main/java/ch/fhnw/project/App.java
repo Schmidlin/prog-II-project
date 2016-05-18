@@ -7,10 +7,6 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
-import java.util.LinkedList;
-import java.util.function.Supplier;
-
-import javafx.*;
 
 
 public final class App extends Application {
@@ -55,7 +51,8 @@ public final class App extends Application {
         System.out.println("the size of value-List from first Variable: " + variableList.get(0).getValues().size());
 
 
-        StackPane pane = new StackPane(MainPain.getMainPain());
+
+        StackPane pane = new StackPane(MainPain.createMainPain());
         Scene scene = new Scene(pane);
         stage.setScene(scene);
         stage.show();
