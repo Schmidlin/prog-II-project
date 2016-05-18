@@ -15,8 +15,12 @@ import javafx.scene.control.Slider;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Line;
 import javafx.stage.Stage;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -26,32 +30,18 @@ public class ScatterPlot {
 
     public static Pane createScatterPane() {
 
+        List<Variables> testList = getList();
+
         //create Widgets
         CheckBox timeLine = new CheckBox("Show Time Line");
+        timeLine.setSelected(true);
         Slider pointSizeSlider = new Slider(5,15,15);
         ColorPicker cP = new ColorPicker(Color.BLUE);
         Label sliderLabel = new Label("Change Point Size");
 
-        NumberAxis xAxis = new NumberAxis ();
-        NumberAxis yAxis = new NumberAxis();
-        ScatterChart<Number,Number> sc = new ScatterChart<>(xAxis,yAxis);
-        LineChart<Number,Number> lc = new LineChart<>(xAxis,yAxis);
-
-        double[] a = {2,3,4};
-        double[] b = {1,3,4};
-
-        XYChart.Series data1 = new XYChart.Series();
-        for (int i = 0; i < a.length; i++) {
-            XYChart.Data<Number, Number> point = new XYChart.Data<>(a[i],b[i]);
-            Circle circle = new Circle();
-            circle.fillProperty().bind(cP.valueProperty());
-            circle.radiusProperty().bind(pointSizeSlider.valueProperty());
-            point.setNode(circle);
-            data1.getData().add(point);
-        }
-        sc.getData().add(data1);
-        lc.getData().add(data1);
-        lc.lookup(".chart-plot-background").setStyle("-fx-background-color: transparent");
+        ScatterChart<Number,Number> sc = getsc(testList,pointSizeSlider,cP,timeLine);
+        LineChart<Number,Number> lc = getlc(testList,timeLine,cP);
+        lc.setAxisSortingPolicy(LineChart.SortingPolicy.NONE);
 
         /*VBox rigthHbox = new VBox();
         rigthHbox.setAlignment(Pos.CENTER);
@@ -68,7 +58,6 @@ public class ScatterPlot {
         StackPane scatterPane = new StackPane();
         scatterPane.getChildren().add(hBox);*/
 
-
         GridPane scatterPane = new GridPane();
         scatterPane.setHgap(7);
         scatterPane.setVgap(7);
@@ -81,6 +70,79 @@ public class ScatterPlot {
         scatterPane.add(lc, 1,3);
 
         return scatterPane;
-
     }
+
+    private static List<Variables> getList(){
+
+        List<Variables> testList = new LinkedList<>();
+
+        List<Double> a = new LinkedList<>();
+        a.add(3.0);a.add(1.0);a.add(4.0);a.add(6.0);a.add(5.0);
+        Variables var1 = new Variables("Variable1", a );
+
+        List<Double> b = new LinkedList<>();
+        b.add(4.0);b.add(2.0);b.add(7.0);b.add(5.0);b.add(3.0);
+        Variables var2 = new Variables("Variable2", b );
+        testList.add(var1);
+        testList.add(var2);
+
+        return testList;
+    }
+    private static ScatterChart<Number,Number> getsc(List<Variables> testList,Slider pointSizeSlider,ColorPicker cP,CheckBox timeLine){
+
+        NumberAxis xAxis = new NumberAxis ();
+        NumberAxis yAxis = new NumberAxis();
+        LineChart<Number,Number> lc = new LineChart<>(xAxis,yAxis);
+        ScatterChart<Number,Number> sc = new ScatterChart<>(xAxis, yAxis);
+
+        List<Double> a,b;
+        a = testList.get(0).getValues();
+        b = testList.get(1).getValues();
+
+        XYChart.Series data1 = new XYChart.Series();
+
+        for (int i = 0; i < a.size(); i++) {
+        XYChart.Data<Number, Number> point = new XYChart.Data<>(a.get(i),b.get(i));
+        Circle circle = new Circle();
+        circle.fillProperty().bind(cP.valueProperty());
+        circle.radiusProperty().bind(pointSizeSlider.valueProperty());
+        point.setNode(circle);
+        data1.getData().add(point);
+        }
+        sc.getData().add(data1);
+
+
+        return sc;
+    }
+    private static LineChart<Number,Number> getlc(List<Variables> testList,CheckBox timeLine,ColorPicker cP){
+
+        if(timeLine.isSelected()){
+        NumberAxis xAxis = new NumberAxis ();
+        NumberAxis yAxis = new NumberAxis();
+        LineChart<Number,Number> lc = new LineChart<>(xAxis,yAxis);
+        List<Double> a,b;
+        a = testList.get(0).getValues();
+        b = testList.get(1).getValues();
+
+        XYChart.Series data1 = new XYChart.Series();
+        for (int i = 0; i < a.size(); i++) {
+            XYChart.Data<Number, Number> lines = new XYChart.Data<>(a.get(i),b.get(i));
+            Line line = new Line();
+            line.strokeProperty().bind(cP.valueProperty());
+            lines.setNode(line);
+            data1.getData().add(lines);
+        }
+        lc.getData().add(data1);
+        lc.lookup(".chart-plot-background").setStyle("-fx-background-color: transparent");
+        return lc;
+        }
+        else {
+            NumberAxis xAxis = new NumberAxis ();
+            NumberAxis yAxis = new NumberAxis();
+            LineChart<Number,Number> lc = new LineChart<>(xAxis,yAxis);
+            lc.lookup(".chart-plot-background").setStyle("-fx-background-color: transparent");
+            return lc;
+        }
+    }
+
 }
