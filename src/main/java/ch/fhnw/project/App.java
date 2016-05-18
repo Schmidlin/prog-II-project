@@ -8,6 +8,7 @@ import javafx.stage.Stage;
 
 import java.io.File;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.function.Supplier;
 
 import javafx.*;
@@ -47,7 +48,7 @@ public final class App extends Application {
     @Override
     public void start(Stage stage) {
 
-        LinkedList<Variables> variableList = DataConvert.convert(fileChoose());
+        List<Variables> variableList = DataConvert2.convert2(fileChoose());
 
         System.out.println("Name of second Variable: " + variableList.get(1).getName());
         System.out.println("first value of first Variable: " + variableList.get(0).getValues().get(0));
@@ -55,7 +56,7 @@ public final class App extends Application {
         System.out.println("the size of value-List from first Variable: " + variableList.get(0).getValues().size());
 
 
-        StackPane pane = new StackPane(MainPain.getMainPain());
+        StackPane pane = new StackPane(mainPain.getMainPain());
         Scene scene = new Scene(pane);
         stage.setScene(scene);
         stage.show();

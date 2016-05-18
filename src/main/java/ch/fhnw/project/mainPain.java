@@ -7,10 +7,12 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
+import java.util.List;
+
 /**
  * Created by thomasschmidlin on 04.05.16.
  */
-public class MainPain {
+public class mainPain {
 
     public static Pane getMainPain () {
 
