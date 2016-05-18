@@ -24,14 +24,14 @@ import java.util.List;
  */
 public class ScatterPlot {
 
-    public static Pane createScatterPane() {
+    public static Pane createScatterPane(List<Variables> variableList) {
 
-        List<Variables> testList = getList();
+        List<Variables> testList = variableList;
 
         //create Widgets
         CheckBox timeLine = new CheckBox("Show Time Line");
         timeLine.setSelected(false);
-        Slider pointSizeSlider = new Slider(5,15,10);
+        Slider pointSizeSlider = new Slider(1,2,5);
         ColorPicker cP = new ColorPicker(Color.BLUE);
         Label sliderLabel = new Label("Change Point Size");
 

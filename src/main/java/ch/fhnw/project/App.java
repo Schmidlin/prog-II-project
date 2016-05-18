@@ -56,7 +56,7 @@ public final class App extends Application {
         System.out.println("the size of value-List from first Variable: " + variableList.get(0).getValues().size());
 
 
-        StackPane pane = new StackPane(mainPain.getMainPain());
+        StackPane pane = new StackPane(mainPain.createMainPain(variableList));
         Scene scene = new Scene(pane);
         stage.setScene(scene);
         stage.show();

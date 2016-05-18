@@ -14,10 +14,10 @@ import java.util.List;
  */
 public class mainPain {
 
-    public static Pane createMainPain() {
+    public static Pane createMainPain(List<Variables> variableList) {
 
         HBox scatterPlot = new HBox();
-        scatterPlot.getChildren().addAll(ScatterPlot.createScatterPane());
+        scatterPlot.getChildren().addAll(ScatterPlot.createScatterPane(variableList));
         scatterPlot.setAlignment(Pos.CENTER);
         scatterPlot.setPadding(new Insets(5, 5, 5, 5));
 
