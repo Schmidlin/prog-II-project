@@ -7,11 +7,8 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
-import java.util.LinkedList;
+import java.io.IOException;
 import java.util.List;
-import java.util.function.Supplier;
-
-import javafx.*;
 
 
 public final class App extends Application {
@@ -31,14 +28,7 @@ public final class App extends Application {
                 );
 
         File selectedFile = chooser.showOpenDialog(null);
-        if (selectedFile != null) {
-            return selectedFile;
-        } else {
-            fileChoose();
-        }
-
         return selectedFile;
-
     }
 
     public static void main(String[] args) {
@@ -48,18 +38,29 @@ public final class App extends Application {
     @Override
     public void start(Stage stage) {
 
-        List<Variables> variableList = DataConvert2.convert2(fileChoose());
+        DataConverter converter;
+        File file = fileChoose();
+        if (file==null){System.exit(0);}
+        if(file.getName().endsWith("txt")){
+            converter = new TxtConverter();
+        }
+        else{
+            converter = new LinConverter();
+        }
+        try {
+            Data dataObject = converter.read(file);
+            StackPane pane = new StackPane(mainPain.createMainPain(dataObject.getListVariables()));
+            Scene scene = new Scene(pane);
+            stage.setScene(scene);
+            stage.setTitle(dataObject.getDataName());
+            stage.show();
 
-        System.out.println("Name of second Variable: " + variableList.get(1).getName());
-        System.out.println("first value of first Variable: " + variableList.get(0).getValues().get(0));
-        System.out.println("third value of second Variable: "+ variableList.get(1).getValues().get(2));
-        System.out.println("the size of value-List from first Variable: " + variableList.get(0).getValues().size());
+        } catch (IOException e) {
+            ErrorMessages.ioexception();
+        }
 
 
-        StackPane pane = new StackPane(mainPain.createMainPain(variableList));
-        Scene scene = new Scene(pane);
-        stage.setScene(scene);
-        stage.show();
+
 
     }
 
