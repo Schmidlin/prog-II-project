@@ -16,6 +16,7 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
+import java.text.NumberFormat;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -30,16 +31,16 @@ public class ScatterPlot {
 
         //create Widgets
         CheckBox timeLine = new CheckBox("Show Time Line");
-        timeLine.setSelected(false);
         Slider pointSizeSlider = new Slider(1,2,5);
+        Label pointSizeSliderLabel = new Label("Point Size: ");
         ColorPicker cP = new ColorPicker(Color.BLUE);
         Label sliderLabel = new Label("Change Point Size");
 
         //create Pane
-        GridPane scatterPane = new GridPane();
         ScatterChart<Number,Number> sc = getsc(testList,pointSizeSlider,cP,timeLine);
         LineChart<Number,Number> lc = getlc(testList,timeLine,cP);
-
+        sc.lookup(".chart-plot-background").setStyle("-fx-background-color: transparent");
+        lc.setVisible(false);
         //Checkbox commands
         timeLine.selectedProperty().addListener(new ChangeListener<Boolean>(){
 
@@ -50,23 +51,36 @@ public class ScatterPlot {
                 }
                 else {
                     lc.setVisible(true);
-                    sc.lookup(".chart-plot-background").setStyle("-fx-background-color: transparent");
                 }
             }
         });
 
-        //style pane
-        scatterPane.setHgap(7);
-        scatterPane.setVgap(7);
-        scatterPane.setPadding(new Insets(10,10,10,10));
-        scatterPane.setAlignment(Pos.CENTER);
-        scatterPane.add(pointSizeSlider,1,0,1,1);
-        scatterPane.add(timeLine,1,1);
-        scatterPane.add(cP,2,1);
-        scatterPane.add(lc, 1,3);
-        scatterPane.add(sc, 1,3);
 
-        return scatterPane;
+
+        //style pane
+        HBox firstLine = new HBox();
+        firstLine.getChildren().addAll(pointSizeSliderLabel,pointSizeSlider);
+        firstLine.setAlignment(Pos.CENTER);
+        firstLine.setPadding(new Insets(5,5,5,5));
+
+        HBox secondLine = new HBox();
+        secondLine.getChildren().addAll(timeLine,cP);
+        secondLine.setAlignment(Pos.CENTER);
+        secondLine.setSpacing(20);
+        secondLine.setPadding(new Insets(10,10,10,10));
+
+        StackPane scatterPane = new StackPane();
+        scatterPane.getChildren().addAll(lc,sc);
+        scatterPane.setAlignment(Pos.CENTER);
+        //scatterPane.setMaxWidth(600);
+
+        VBox overAllBox =new VBox();
+        overAllBox.getChildren().addAll(firstLine,secondLine,scatterPane);
+        overAllBox.setAlignment(Pos.CENTER);
+        overAllBox.setSpacing(10);
+        overAllBox.setPadding(new Insets(5,5,5,5));
+
+        return overAllBox;
     }
 
     private static List<Variables> getList(){
@@ -87,7 +101,6 @@ public class ScatterPlot {
     }
 
     private static ScatterChart<Number,Number> getsc(List<Variables> testList,Slider pointSizeSlider,ColorPicker cP,CheckBox timeLine){
-
         NumberAxis xAxis = new NumberAxis ();
         NumberAxis yAxis = new NumberAxis();
         xAxis.setLabel(testList.get(0).getName());
