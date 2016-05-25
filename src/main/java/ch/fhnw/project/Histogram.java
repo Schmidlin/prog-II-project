@@ -21,9 +21,9 @@ import java.util.List;
 /**
  * Created by thomasschmidlin on 06.05.16.
  */
-public class Histogramm {
+public class Histogram {
 
-    public static Pane createHistogramm(List<Variables> variableList) {
+    public static Pane createHistogram(List<Variables> variableList) {
 
         List<Variables> testList = variableList;
 
@@ -36,7 +36,7 @@ public class Histogramm {
         VBox right = new VBox(rightBarChart(testList));
         right.getChildren().addAll();
         right.setAlignment(Pos.CENTER);
-        right.setSpacing(50);
+        right.setSpacing(10);
         right.setPadding(new Insets(5,5,5,5));
 
         HBox HBox = new HBox();
@@ -49,7 +49,6 @@ public class Histogramm {
         pane.getChildren().add(HBox);
 
         return pane;
-
     }
 
     private static int histogramIntervals(List<Variables> testList){

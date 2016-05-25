@@ -55,8 +55,6 @@ public class ScatterPlot {
             }
         });
 
-
-
         //style pane
         HBox firstLine = new HBox();
         firstLine.getChildren().addAll(pointSizeSliderLabel,pointSizeSlider);
@@ -66,8 +64,8 @@ public class ScatterPlot {
         HBox secondLine = new HBox();
         secondLine.getChildren().addAll(timeLine,cP);
         secondLine.setAlignment(Pos.CENTER);
-        secondLine.setSpacing(20);
-        secondLine.setPadding(new Insets(10,10,10,10));
+        secondLine.setSpacing(10);
+        secondLine.setPadding(new Insets(5,5,5,5));
 
         StackPane scatterPane = new StackPane();
         scatterPane.getChildren().addAll(lc,sc);
