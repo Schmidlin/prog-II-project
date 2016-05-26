@@ -8,7 +8,6 @@ import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
 
 
 public final class App extends Application {
@@ -49,7 +48,7 @@ public final class App extends Application {
         }
         try {
             Data dataObject = converter.read(file);
-            StackPane pane = new StackPane(mainPain.createMainPain(dataObject.getListVariables()));
+            StackPane pane = new StackPane(MainPain.createMainPain(dataObject.getListVariables()));
             Scene scene = new Scene(pane);
             stage.setScene(scene);
             stage.setTitle(dataObject.getDataName());

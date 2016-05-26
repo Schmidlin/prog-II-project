@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * Created by thomasschmidlin on 04.05.16.
  */
-public class mainPain {
+public class MainPain {
 
     public static Pane createMainPain(List<Variables> variableList) {
 
