@@ -49,7 +49,7 @@ public final class App extends Application {
         }
         try {
             Data dataObject = converter.read(file);
-            StackPane pane = new StackPane(mainPain.createMainPain(dataObject.getListVariables()));
+            StackPane pane = new StackPane(MainPain.createMainPain(dataObject.getListVariables()));
             Scene scene = new Scene(pane);
             stage.setScene(scene);
             stage.setTitle(dataObject.getDataName());
@@ -58,13 +58,5 @@ public final class App extends Application {
         } catch (IOException e) {
             ErrorMessages.ioexception();
         }
-
-
-
-
     }
-
-
-
-
 }

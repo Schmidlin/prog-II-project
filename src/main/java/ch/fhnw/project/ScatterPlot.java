@@ -17,6 +17,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
 import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -25,9 +26,13 @@ import java.util.List;
  */
 public class ScatterPlot {
 
-    public static Pane createScatterPane(List<Variables> variableList) {
+    public static Pane createScatterPane(Variables x, Variables y, List<Variables> variableList) {
 
-        List<Variables> testList = variableList;
+
+
+        List<Variables> testList = new ArrayList<>();
+        testList.add(x);
+        testList.add(y);
 
         //create Widgets
         CheckBox timeLine = new CheckBox("Show Time Line");
@@ -150,5 +155,6 @@ public class ScatterPlot {
         lc.setLegendVisible(false);
         return lc;
     }
+
 
 }
