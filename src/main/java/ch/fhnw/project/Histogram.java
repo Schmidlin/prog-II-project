@@ -1,5 +1,6 @@
 package ch.fhnw.project;
 
+import javafx.beans.property.IntegerProperty;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.chart.BarChart;
@@ -13,6 +14,7 @@ import javafx.scene.layout.VBox;
 import javafx.util.converter.DoubleStringConverter;
 
 import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -23,9 +25,12 @@ import java.util.List;
  */
 public class Histogram {
 
-    public static Pane createHistogram(List<Variables> variableList) {
+    public static Pane createHistogram(List<Variables> variableList, IntegerProperty x, IntegerProperty y) {
 
-        List<Variables> testList = variableList;
+        List<Variables> testList = new ArrayList<>();
+        testList.add(variableList.get(x.getValue()));
+        testList.add(variableList.get(y.getValue()));
+
 
         VBox left = new VBox();
         left.getChildren().addAll(leftBarChart(testList));

@@ -1,5 +1,6 @@
 package ch.fhnw.project;
 
+import javafx.beans.property.IntegerProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
@@ -21,18 +22,22 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import static ch.fhnw.project.App.xAxis;
+import static ch.fhnw.project.App.yAxis;
+
 /**
  * Created by thomasschmidlin on 04.05.16.
  */
 public class ScatterPlot {
 
-    public static Pane createScatterPane(Variables x, Variables y, List<Variables> variableList) {
-
-
+    public static Pane createScatterPane(List<Variables> variableList, IntegerProperty x, IntegerProperty y) {
+        x = xAxis;
+        y = yAxis;
+        System.out.println("Variable x, Scatterplot: "+ x);
 
         List<Variables> testList = new ArrayList<>();
-        testList.add(x);
-        testList.add(y);
+        testList.add(variableList.get(x.getValue()));
+        testList.add(variableList.get(y.getValue()));
 
         //create Widgets
         CheckBox timeLine = new CheckBox("Show Time Line");
