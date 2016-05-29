@@ -19,6 +19,9 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
+import static ch.fhnw.project.App.xAxis;
+import static ch.fhnw.project.App.yAxis;
+
 
 /**
  * Created by thomasschmidlin on 06.05.16.
@@ -26,6 +29,9 @@ import java.util.List;
 public class Histogram {
 
     public static Pane createHistogram(List<Variables> variableList, IntegerProperty x, IntegerProperty y) {
+
+        x = xAxis;
+        y = yAxis;
 
         List<Variables> testList = new ArrayList<>();
         testList.add(variableList.get(x.getValue()));
@@ -56,28 +62,28 @@ public class Histogram {
         return pane;
     }
 
-    private static int histogramIntervals(List<Variables> testList){
-        List<Double> a = testList.get(0).getValues();
+    private static int histogramIntervals(List<Variables> testList, int listIndex){
+        List<Double> a = testList.get(listIndex).getValues();
         double n = a.size();
         return (int) Math.sqrt(n);
     }
 
-    private static double intervalWidth(List<Variables> testList){
-        int interval = histogramIntervals(testList);
-        List<Double> variable = testList.get(0).getValues();
+    private static double intervalWidth(List<Variables> testList, int listIndex){
+        int interval = histogramIntervals(testList,listIndex);
+        List<Double> variable = testList.get(listIndex).getValues();
         double max = variable.get(variable.size()-1);
         double min = variable.get(0);
         return (max - min) / interval; //returns intervalWidth;
     }
 
-    private static int[] histogramAllocationArray(List<Variables> testList){
-        int interval = histogramIntervals(testList);
+    private static int[] histogramAllocationArray(List<Variables> testList, int listIndex){
+        int interval = histogramIntervals(testList,listIndex);
         int[] allocationArray = new int[interval];
         List<Double> variable = testList.get(0).getValues();
 
         Collections.sort(variable);
         double min = variable.get(0);
-        double intervalWidth = intervalWidth(testList);
+        double intervalWidth = intervalWidth(testList,listIndex);
         for (Double element : variable){
             for (int i =0; i<interval; i++){
                 if(i*intervalWidth+min<element&&(i+1)*intervalWidth+min >= element){
@@ -94,9 +100,9 @@ public class Histogram {
 
     private static BarChart leftBarChart(List<Variables> testList) {
 
-        int[] allocationArray = histogramAllocationArray(testList);
+        int[] allocationArray = histogramAllocationArray(testList,0);
         List<Double> variable = testList.get(0).getValues();
-        double intervalWidth = intervalWidth(testList);
+        double intervalWidth = intervalWidth(testList,0);
 
         CategoryAxis xAxis = new CategoryAxis();
         NumberAxis yAxis = new NumberAxis();
@@ -120,9 +126,9 @@ public class Histogram {
     }
     private static BarChart rightBarChart(List<Variables> testList) {
 
-        int[] allocationArray = histogramAllocationArray(testList);
+        int[] allocationArray = histogramAllocationArray(testList,1);
         List<Double> variable = testList.get(1).getValues();
-        double intervalWidth = intervalWidth(testList);
+        double intervalWidth = intervalWidth(testList,1);
 
         CategoryAxis xAxis = new CategoryAxis();
         NumberAxis yAxis = new NumberAxis();
