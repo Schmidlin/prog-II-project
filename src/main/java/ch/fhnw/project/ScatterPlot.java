@@ -33,7 +33,7 @@ public class ScatterPlot {
     public static Pane createScatterPane(List<Variables> variableList, IntegerProperty x, IntegerProperty y) {
         x = xAxis;
         y = yAxis;
-        System.out.println("Variable x, Scatterplot: "+ x);
+        //System.out.println("Variable x, Scatterplot: "+ x);
 
         List<Variables> testList = new ArrayList<>();
         testList.add(variableList.get(x.getValue()));

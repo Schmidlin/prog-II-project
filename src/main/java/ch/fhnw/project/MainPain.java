@@ -54,8 +54,8 @@ public class MainPain {
             @Override
             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
                 xAxis.setValue(newValue);
-                System.out.println("VariableName: "+plotVariables.get(0).getName());
-                System.out.println("newValue: "+newValue);
+                //System.out.println("VariableName: "+plotVariables.get(0).getName());
+                //System.out.println("newValue: "+newValue);
                 createMainPain(variablesList,xAxis,yAxis);
                 App.cleanup(variablesList,xAxis,yAxis);
             }
@@ -64,8 +64,8 @@ public class MainPain {
             @Override
             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
                 yAxis.setValue(newValue);
-                System.out.println("VariableName: "+plotVariables.get(0).getName());
-                System.out.println("newValue: "+newValue);
+                //System.out.println("VariableName: "+plotVariables.get(0).getName());
+                //System.out.println("newValue: "+newValue);
                 createMainPain(variablesList,xAxis,yAxis);
                 App.cleanup(variablesList, xAxis, yAxis);
 

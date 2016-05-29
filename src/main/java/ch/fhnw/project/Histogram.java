@@ -11,12 +11,9 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.util.converter.DoubleStringConverter;
 
-import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 
 import static ch.fhnw.project.App.xAxis;
@@ -39,13 +36,13 @@ public class Histogram {
 
 
         VBox left = new VBox();
-        left.getChildren().addAll(leftBarChart(testList));
+        left.getChildren().addAll(createBarChart(testList,0));
         left.setAlignment(Pos.CENTER);
         left.setSpacing(10);
         left.setPadding(new Insets(5,5,5,5));
 
-        VBox right = new VBox(rightBarChart(testList));
-        right.getChildren().addAll();
+        VBox right = new VBox();
+        right.getChildren().addAll(createBarChart(testList,1));
         right.setAlignment(Pos.CENTER);
         right.setSpacing(10);
         right.setPadding(new Insets(5,5,5,5));
@@ -79,7 +76,7 @@ public class Histogram {
     private static int[] histogramAllocationArray(List<Variables> testList, int listIndex){
         int interval = histogramIntervals(testList,listIndex);
         int[] allocationArray = new int[interval];
-        List<Double> variable = testList.get(0).getValues();
+        List<Double> variable = testList.get(listIndex).getValues();
 
         Collections.sort(variable);
         double min = variable.get(0);
@@ -98,56 +95,31 @@ public class Histogram {
     }
 
 
-    private static BarChart leftBarChart(List<Variables> testList) {
+    private static BarChart createBarChart(List<Variables> testList, int listIndex) {
 
-        int[] allocationArray = histogramAllocationArray(testList,0);
-        List<Double> variable = testList.get(0).getValues();
-        double intervalWidth = intervalWidth(testList,0);
+        int[] allocationArray = histogramAllocationArray(testList,listIndex);
+        List<Double> variable = testList.get(listIndex).getValues();
+        double intervalWidth = intervalWidth(testList,listIndex);
 
-        CategoryAxis xAxis = new CategoryAxis();
-        NumberAxis yAxis = new NumberAxis();
-        xAxis.setTickLabelsVisible(false);
-        xAxis.setOpacity(0);
+        CategoryAxis xAxisBC = new CategoryAxis();
+        NumberAxis yAxisBC = new NumberAxis();
+        xAxisBC.setTickLabelsVisible(false);
+        xAxisBC.setOpacity(0);
 
-        BarChart<String,Number> bc = new BarChart<>(xAxis,yAxis);
+        BarChart<String,Number> bc = new BarChart<>(xAxisBC,yAxisBC);
 
         XYChart.Series series1 = new XYChart.Series();
-        series1.setName(testList.get(0).getName());
+        series1.setName(testList.get(listIndex).getName());
         double a = variable.get(0);
         for (int i = 0; i < allocationArray.length; i++) {
-            XYChart.Data<String,Number> lines = new XYChart.Data<String, Number>(String.format("%s - %s",a,a+intervalWidth),allocationArray[i]);
+            XYChart.Data<String,Number> lines = new XYChart.Data<String, Number>(String.format("%f - %f",a,(a+intervalWidth)),allocationArray[i]);
+            System.out.println("Line: "+lines);
             series1.getData().add(lines);
             a = a + intervalWidth;
         }
         bc.getData().add(series1);
         bc.setLegendVisible(false);
-        bc.setTitle(testList.get(0).getName());
-        return bc;
-    }
-    private static BarChart rightBarChart(List<Variables> testList) {
-
-        int[] allocationArray = histogramAllocationArray(testList,1);
-        List<Double> variable = testList.get(1).getValues();
-        double intervalWidth = intervalWidth(testList,1);
-
-        CategoryAxis xAxis = new CategoryAxis();
-        NumberAxis yAxis = new NumberAxis();
-        xAxis.setTickLabelsVisible(false);
-        xAxis.setOpacity(0);
-
-        BarChart<String,Number> bc = new BarChart<>(xAxis,yAxis);
-
-        XYChart.Series series1 = new XYChart.Series();
-        series1.setName(testList.get(1).getName());
-        double a = variable.get(0);
-        for (int i = 0; i < allocationArray.length; i++) {
-            XYChart.Data<String,Number> lines = new XYChart.Data<String, Number>(String.format("%s - %s",a,a+intervalWidth),allocationArray[i]);
-            series1.getData().add(lines);
-            a = a + intervalWidth;
-        }
-        bc.getData().add(series1);
-        bc.setLegendVisible(false);
-        bc.setTitle(testList.get(1).getName());
+        bc.setTitle(testList.get(listIndex).getName());
         return bc;
     }
 }
