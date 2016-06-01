@@ -91,7 +91,7 @@ public class ScatterPlot {
         return overAllBox;
     }
 
-    private static List<Variables> getList(){
+    private static List<Variables> getList(){ //remove?!
 
         List<Variables> testList = new LinkedList<>();
 

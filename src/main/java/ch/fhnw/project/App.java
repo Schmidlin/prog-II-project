@@ -16,10 +16,8 @@ import java.util.List;
 
 public final class App extends Application {
 
-    public static File data;
     public static IntegerProperty xAxis = new SimpleIntegerProperty(0);
     public static IntegerProperty yAxis = new SimpleIntegerProperty(1);
-    public static Data allData;
     public static Stage primaryStage;
     public static File fileChoose() {
 
@@ -42,7 +40,7 @@ public final class App extends Application {
     }
 
     public static void cleanup(List<Variables> list,IntegerProperty x, IntegerProperty y){
-        StackPane pane = new StackPane(MainPain.createMainPain(list,xAxis,yAxis));
+        StackPane pane = new StackPane(MainPain.createMainPain(list,x,y));
         Scene scene = new Scene(pane);
         primaryStage.setScene(scene);
     }
@@ -61,7 +59,6 @@ public final class App extends Application {
         }
         try {
             Data dataObject = converter.read(file);
-            allData = dataObject;
             StackPane pane = new StackPane(MainPain.createMainPain(dataObject.getListVariables(),xAxis,yAxis));
             Scene scene = new Scene(pane);
             stage.setScene(scene);
@@ -69,7 +66,7 @@ public final class App extends Application {
             primaryStage = stage;
             stage.show();
 
-        } catch (IOException e) {
+        } catch (IOException e){
             ErrorMessages.ioexception();
         }
     }

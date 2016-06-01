@@ -38,8 +38,6 @@ public class MainPain {
         plotVariables.add(variablesList.get(x.getValue()));
         plotVariables.add(variablesList.get(y.getValue()));
 
-        Variables variable = plotVariables.get(0);
-
         ComboBox<String> cbXAxis = getChoiceBox(variablesList);
         cbXAxis.setValue(plotVariables.get(0).getName());
         Label labelXAxis = new Label("x-Axis:");
@@ -56,7 +54,6 @@ public class MainPain {
                 xAxis.setValue(newValue);
                 //System.out.println("VariableName: "+plotVariables.get(0).getName());
                 //System.out.println("newValue: "+newValue);
-                createMainPain(variablesList,xAxis,yAxis);
                 App.cleanup(variablesList,xAxis,yAxis);
             }
         });
@@ -66,7 +63,6 @@ public class MainPain {
                 yAxis.setValue(newValue);
                 //System.out.println("VariableName: "+plotVariables.get(0).getName());
                 //System.out.println("newValue: "+newValue);
-                createMainPain(variablesList,xAxis,yAxis);
                 App.cleanup(variablesList, xAxis, yAxis);
 
 

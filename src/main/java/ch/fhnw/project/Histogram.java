@@ -18,6 +18,7 @@ import java.util.List;
 
 import static ch.fhnw.project.App.xAxis;
 import static ch.fhnw.project.App.yAxis;
+import static java.lang.Math.round;
 
 
 /**
@@ -68,8 +69,8 @@ public class Histogram {
     private static double intervalWidth(List<Variables> testList, int listIndex){
         int interval = histogramIntervals(testList,listIndex);
         List<Double> variable = testList.get(listIndex).getValues();
-        double max = variable.get(variable.size()-1);
-        double min = variable.get(0);
+        double max = Collections.max(variable);
+        double min = Collections.min(variable);
         return (max - min) / interval; //returns intervalWidth;
     }
 
@@ -78,8 +79,8 @@ public class Histogram {
         int[] allocationArray = new int[interval];
         List<Double> variable = testList.get(listIndex).getValues();
 
-        Collections.sort(variable);
-        double min = variable.get(0);
+
+        double min = Collections.min(variable);
         double intervalWidth = intervalWidth(testList,listIndex);
         for (Double element : variable){
             for (int i =0; i<interval; i++){
@@ -110,9 +111,9 @@ public class Histogram {
 
         XYChart.Series series1 = new XYChart.Series();
         series1.setName(testList.get(listIndex).getName());
-        double a = variable.get(0);
+        double a = Collections.min(variable);
         for (int i = 0; i < allocationArray.length; i++) {
-            XYChart.Data<String,Number> lines = new XYChart.Data<String, Number>(String.format("%f - %f",a,(a+intervalWidth)),allocationArray[i]);
+            XYChart.Data<String,Number> lines = new XYChart.Data<String, Number>(String.format("%f - %f",a,a+intervalWidth),allocationArray[i]);
             System.out.println("Line: "+lines);
             series1.getData().add(lines);
             a = a + intervalWidth;
