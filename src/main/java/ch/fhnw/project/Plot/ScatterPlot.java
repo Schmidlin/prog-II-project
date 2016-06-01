@@ -1,7 +1,9 @@
 package ch.fhnw.project.Plot;
 
 import ch.fhnw.project.Variables;
+import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
@@ -62,6 +64,12 @@ public class ScatterPlot {
                 else {
                     lc.setVisible(true);
                 }
+            }
+        });
+
+        pointSizeSlider.valueProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
             }
         });
 
@@ -128,9 +136,9 @@ public class ScatterPlot {
             XYChart.Data<Number, Number> point = new XYChart.Data<>(a.get(i),b.get(i));
             Circle circle = new Circle();
             circle.fillProperty().bind(cP.valueProperty());
+            DoubleProperty x = new SimpleDoubleProperty(1);
             if (bubblePlotCheckbox.getValue()==false){
-                circle.setRadius((variablesList.get(zAxis.getValue()).getValues().get(i))/15);
-
+                circle.radiusProperty().bind(pointSizeSlider.valueProperty().multiply((variablesList.get(zAxis.getValue()).getValues().get(i))/15));
             }else{
                 circle.radiusProperty().bind(pointSizeSlider.valueProperty());
             }
