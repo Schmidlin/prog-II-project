@@ -2,11 +2,8 @@ package ch.fhnw.project;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
@@ -25,8 +22,6 @@ public class MainPain {
     public static Pane createMainPain(List<Variables> variablesList) {
 
         List<Variables> plotVariables = new ArrayList<>();
-        //plotVariables.add(variablesList.get(0));
-        //plotVariables.add(variablesList.get(1));
 
         Variables variable = variablesList.get(0);
 
