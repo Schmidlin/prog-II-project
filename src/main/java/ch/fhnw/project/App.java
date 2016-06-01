@@ -1,6 +1,12 @@
 package ch.fhnw.project;
 
+import ch.fhnw.project.DataHandling.Data;
+import ch.fhnw.project.DataHandling.DataConverter;
+import ch.fhnw.project.DataHandling.LinConverter;
+import ch.fhnw.project.DataHandling.TxtConverter;
+import ch.fhnw.project.Plot.MainPain;
 import javafx.application.Application;
+import javafx.beans.property.*;
 import javafx.scene.Scene;
 import javafx.scene.layout.StackPane;
 import javafx.stage.FileChooser;
@@ -8,12 +14,12 @@ import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 
 public final class App extends Application {
 
-    public static File data;
-
+    public static Stage primaryStage;
     public static File fileChoose() {
 
 
@@ -34,6 +40,12 @@ public final class App extends Application {
         launch(args);
     }
 
+    public static void cleanup(List<Variables> list,int x, int y){
+        StackPane pane = new StackPane(MainPain.createMainPain(list,x,y));
+        Scene scene = new Scene(pane);
+        primaryStage.setScene(scene);
+    }
+
     @Override
     public void start(Stage stage) {
 
@@ -48,13 +60,14 @@ public final class App extends Application {
         }
         try {
             Data dataObject = converter.read(file);
-            StackPane pane = new StackPane(MainPain.createMainPain(dataObject.getListVariables()));
+            StackPane pane = new StackPane(MainPain.createMainPain(dataObject.getListVariables(),0,1));
             Scene scene = new Scene(pane);
             stage.setScene(scene);
             stage.setTitle(dataObject.getDataName());
+            primaryStage = stage;
             stage.show();
 
-        } catch (IOException e) {
+        } catch (IOException e){
             ErrorMessages.ioexception();
         }
     }
