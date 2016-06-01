@@ -1,5 +1,7 @@
-package ch.fhnw.project;
+package ch.fhnw.project.DataHandling;
 
+
+import ch.fhnw.project.Variables;
 
 import java.io.BufferedReader;
 import java.io.File;

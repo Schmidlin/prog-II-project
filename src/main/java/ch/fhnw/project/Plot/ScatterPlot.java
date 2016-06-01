@@ -1,5 +1,6 @@
-package ch.fhnw.project;
+package ch.fhnw.project.Plot;
 
+import ch.fhnw.project.Variables;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;

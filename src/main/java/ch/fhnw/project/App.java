@@ -1,7 +1,11 @@
 package ch.fhnw.project;
 
+import ch.fhnw.project.DataHandling.Data;
+import ch.fhnw.project.DataHandling.DataConverter;
+import ch.fhnw.project.DataHandling.LinConverter;
+import ch.fhnw.project.DataHandling.TxtConverter;
+import ch.fhnw.project.Plot.MainPain;
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleBooleanProperty;
