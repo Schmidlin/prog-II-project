@@ -114,7 +114,7 @@ public class Histogram {
         double a = Collections.min(variable);
         for (int i = 0; i < allocationArray.length; i++) {
             XYChart.Data<String,Number> lines = new XYChart.Data<String, Number>(String.format("%f - %f",a,a+intervalWidth),allocationArray[i]);
-            System.out.println("Line: "+lines);
+            //System.out.println("Line: "+lines);
             series1.getData().add(lines);
             a = a + intervalWidth;
         }

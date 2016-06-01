@@ -22,8 +22,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import static ch.fhnw.project.App.xAxis;
-import static ch.fhnw.project.App.yAxis;
+import static ch.fhnw.project.App.*;
 
 /**
  * Created by thomasschmidlin on 04.05.16.
@@ -47,7 +46,7 @@ public class ScatterPlot {
         Label sliderLabel = new Label("Change Point Size");
 
         //create Pane
-        ScatterChart<Number,Number> sc = getsc(testList,pointSizeSlider,cP,timeLine);
+        ScatterChart<Number,Number> sc = getsc(variableList,pointSizeSlider,cP,timeLine);
         LineChart<Number,Number> lc = getlc(testList,timeLine,cP);
         sc.lookup(".chart-plot-background").setStyle("-fx-background-color: transparent");
         lc.setVisible(false);
@@ -108,12 +107,15 @@ public class ScatterPlot {
         return testList;
     }
 
-    private static ScatterChart<Number,Number> getsc(List<Variables> testList,Slider pointSizeSlider,ColorPicker cP,CheckBox timeLine){
-        NumberAxis xAxis = new NumberAxis ();
-        NumberAxis yAxis = new NumberAxis();
-        xAxis.setLabel(testList.get(0).getName());
-        yAxis.setLabel(testList.get(1).getName());
-        ScatterChart<Number,Number> sc = new ScatterChart<>(xAxis, yAxis);
+    private static ScatterChart<Number,Number> getsc(List<Variables> variablesList,Slider pointSizeSlider,ColorPicker cP,CheckBox timeLine){
+        NumberAxis scXAxis = new NumberAxis ();
+        NumberAxis scYAxis = new NumberAxis();
+        List<Variables> testList = new ArrayList<>();
+        testList.add(variablesList.get(xAxis.getValue()));
+        testList.add(variablesList.get(yAxis.getValue()));
+        scXAxis.setLabel(testList.get(0).getName());
+        scYAxis.setLabel(testList.get(1).getName());
+        ScatterChart<Number,Number> sc = new ScatterChart<>(scXAxis, scYAxis);
 
         List<Double> a,b;
         a = testList.get(0).getValues();
@@ -125,7 +127,12 @@ public class ScatterPlot {
             XYChart.Data<Number, Number> point = new XYChart.Data<>(a.get(i),b.get(i));
             Circle circle = new Circle();
             circle.fillProperty().bind(cP.valueProperty());
-            circle.radiusProperty().bind(pointSizeSlider.valueProperty());
+            if (bubblePlotCheckbox.getValue()==false){
+                circle.setRadius((variablesList.get(zAxis.getValue()).getValues().get(i))/15);
+
+            }else{
+                circle.radiusProperty().bind(pointSizeSlider.valueProperty());
+            }
             point.setNode(circle);
             data1.getData().add(point);
         }

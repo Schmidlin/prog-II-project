@@ -2,7 +2,9 @@ package ch.fhnw.project;
 
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.scene.Scene;
 import javafx.scene.layout.StackPane;
@@ -18,6 +20,8 @@ public final class App extends Application {
 
     public static IntegerProperty xAxis = new SimpleIntegerProperty(0);
     public static IntegerProperty yAxis = new SimpleIntegerProperty(1);
+    public static IntegerProperty zAxis = new SimpleIntegerProperty(2);
+    public static BooleanProperty bubblePlotCheckbox = new SimpleBooleanProperty(true);
     public static Stage primaryStage;
     public static File fileChoose() {
 
