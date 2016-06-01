@@ -27,14 +27,12 @@ import static java.lang.Math.round;
  */
 public class Histogram {
 
-    public static Pane createHistogram(List<Variables> variableList, IntegerProperty x, IntegerProperty y) {
+    public static Pane createHistogram(List<Variables> variableList, int x, int y) {
 
-        x = xAxis;
-        y = yAxis;
 
         List<Variables> testList = new ArrayList<>();
-        testList.add(variableList.get(x.getValue()));
-        testList.add(variableList.get(y.getValue()));
+        testList.add(variableList.get(x));
+        testList.add(variableList.get(y));
 
 
         VBox left = new VBox();

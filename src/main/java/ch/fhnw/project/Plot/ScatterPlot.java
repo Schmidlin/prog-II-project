@@ -1,5 +1,6 @@
 package ch.fhnw.project.Plot;
 
+import ch.fhnw.project.App;
 import ch.fhnw.project.Variables;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
@@ -12,16 +13,15 @@ import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.ScatterChart;
 import javafx.scene.chart.XYChart;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.ColorPicker;
-import javafx.scene.control.Label;
-import javafx.scene.control.Slider;
+import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import sun.applet.Main;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -31,27 +31,51 @@ import static ch.fhnw.project.App.*;
  * Created by thomasschmidlin on 04.05.16.
  */
 public class ScatterPlot {
+    static CheckBox timeLine = new CheckBox("Show Time Line");
+    static Slider pointSizeSlider = new Slider(2,6,4);
+    static Label pointSizeSliderLabel = new Label("Point Size: ");
+    static ColorPicker cP = new ColorPicker(Color.BLUE);
+    static Label sliderLabel = new Label("Change Point Size");
+    static ComboBox<String> cbZAxis;
+    static CheckBox bubblePlot = new CheckBox("Bubble-Plot");
+    static Label labelZAxis = new Label ("z-Axis");
 
-    public static Pane createScatterPane(List<Variables> variableList, IntegerProperty x, IntegerProperty y) {
-        x = xAxis;
-        y = yAxis;
+
+
+
+    public static Pane createScatterPane(List<Variables> variableList, int x, int y) {
+        //x = xAxis;
+        //y = yAxis;
         //System.out.println("Variable x, Scatterplot: "+ x);
 
+
         List<Variables> testList = new ArrayList<>();
-        testList.add(variableList.get(x.getValue()));
-        testList.add(variableList.get(y.getValue()));
+        testList.add(variableList.get(x));
+        testList.add(variableList.get(y));
+
+        cbZAxis = MainPain.getChoiceBox(variableList);
+        cbZAxis.setValue(testList.get(0).getName());
+        cbZAxis.setDisable(!bubblePlot.isSelected());
+        bubblePlot.setSelected(bubblePlot.isSelected());
+
+        if (variableList.size()>2) {
+            testList.add(variableList.get(cbZAxis.getSelectionModel().selectedIndexProperty().getValue()));
+            cbZAxis.setValue(testList.get(2).getName());
+            testList.add(variableList.get(cbZAxis.getSelectionModel().selectedIndexProperty().get()));
+        }
+
 
         //create Widgets
-        CheckBox timeLine = new CheckBox("Show Time Line");
-        Slider pointSizeSlider = new Slider(1,2,5);
-        Label pointSizeSliderLabel = new Label("Point Size: ");
-        ColorPicker cP = new ColorPicker(Color.BLUE);
-        Label sliderLabel = new Label("Change Point Size");
+;
 
         //create Pane
-        ScatterChart<Number,Number> sc = getsc(variableList,pointSizeSlider,cP,timeLine);
-        LineChart<Number,Number> lc = getlc(testList,timeLine,cP);
+        ScatterChart<Number, Number> sc = getsc(testList,-1);
         sc.lookup(".chart-plot-background").setStyle("-fx-background-color: transparent");
+        if (bubblePlot.isSelected()){
+            sc = getsc(testList,cbZAxis.getSelectionModel().selectedIndexProperty().getValue() );
+            }
+
+        LineChart<Number,Number> lc = getlc(testList);;
         lc.setVisible(false);
         //Checkbox commands
         timeLine.selectedProperty().addListener(new ChangeListener<Boolean>(){
@@ -73,6 +97,22 @@ public class ScatterPlot {
             }
         });
 
+        bubblePlot.selectedProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                if (newValue){
+                    //bubblePlot.setSelected(false);
+                    cbZAxis.setDisable(!newValue);
+                    //App.cleanup(variablesList,(int) cbXAxis.getSelectionModel().selectedIndexProperty().getValue(),(int) cbYAxis.getSelectionModel().selectedIndexProperty().getValue());
+                }else{
+                    //bubblePlot.setSelected(true);
+                    cbZAxis.setDisable(!newValue);
+                    //App.cleanup(variablesList,(int) cbXAxis.getSelectionModel().selectedIndexProperty().getValue(),(int) cbYAxis.getSelectionModel().selectedIndexProperty().getValue());
+                }
+            }
+        });
+
+
         //style pane
         HBox firstLine = new HBox();
         firstLine.getChildren().addAll(pointSizeSliderLabel,pointSizeSlider);
@@ -80,6 +120,9 @@ public class ScatterPlot {
         firstLine.setPadding(new Insets(5,5,5,5));
 
         HBox secondLine = new HBox();
+        if (variableList.size()>2){
+            secondLine.getChildren().addAll(labelZAxis,cbZAxis,bubblePlot);
+        }
         secondLine.getChildren().addAll(timeLine,cP);
         secondLine.setAlignment(Pos.CENTER);
         secondLine.setSpacing(10);
@@ -116,14 +159,16 @@ public class ScatterPlot {
         return testList;
     }
 
-    private static ScatterChart<Number,Number> getsc(List<Variables> variablesList,Slider pointSizeSlider,ColorPicker cP,CheckBox timeLine){
+    private static ScatterChart<Number,Number> getsc(List<Variables> variablesList, int z){
         NumberAxis scXAxis = new NumberAxis ();
         NumberAxis scYAxis = new NumberAxis();
         List<Variables> testList = new ArrayList<>();
-        testList.add(variablesList.get(xAxis.getValue()));
-        testList.add(variablesList.get(yAxis.getValue()));
+        testList.add(variablesList.get(0));
+        testList.add(variablesList.get(1));
         scXAxis.setLabel(testList.get(0).getName());
         scYAxis.setLabel(testList.get(1).getName());
+        scXAxis.setForceZeroInRange(false);
+        scYAxis.setForceZeroInRange(false);
         ScatterChart<Number,Number> sc = new ScatterChart<>(scXAxis, scYAxis);
 
         List<Double> a,b;
@@ -136,9 +181,9 @@ public class ScatterPlot {
             XYChart.Data<Number, Number> point = new XYChart.Data<>(a.get(i),b.get(i));
             Circle circle = new Circle();
             circle.fillProperty().bind(cP.valueProperty());
-            DoubleProperty x = new SimpleDoubleProperty(1);
-            if (bubblePlotCheckbox.getValue()==false){
-                circle.radiusProperty().bind(pointSizeSlider.valueProperty().multiply((variablesList.get(zAxis.getValue()).getValues().get(i))/15));
+            double x = 0;
+            if (z != -1){
+                circle.radiusProperty().bind(pointSizeSlider.valueProperty().multiply((variablesList.get(cbZAxis.getSelectionModel().selectedIndexProperty().getValue()).getValues().get(i))/x));
             }else{
                 circle.radiusProperty().bind(pointSizeSlider.valueProperty());
             }
@@ -151,7 +196,7 @@ public class ScatterPlot {
         return sc;
     }
 
-    private static LineChart<Number,Number> getlc(List<Variables> testList,CheckBox timeLine,ColorPicker cP){
+    private static LineChart<Number,Number> getlc(List<Variables> testList){
 
         NumberAxis xAxis = new NumberAxis();
         NumberAxis yAxis = new NumberAxis();

@@ -19,10 +19,6 @@ import java.util.List;
 
 public final class App extends Application {
 
-    public static IntegerProperty xAxis = new SimpleIntegerProperty(0);
-    public static IntegerProperty yAxis = new SimpleIntegerProperty(1);
-    public static IntegerProperty zAxis = new SimpleIntegerProperty(2);
-    public static BooleanProperty bubblePlotCheckbox = new SimpleBooleanProperty(true);
     public static Stage primaryStage;
     public static File fileChoose() {
 
@@ -44,7 +40,7 @@ public final class App extends Application {
         launch(args);
     }
 
-    public static void cleanup(List<Variables> list,IntegerProperty x, IntegerProperty y){
+    public static void cleanup(List<Variables> list,int x, int y){
         StackPane pane = new StackPane(MainPain.createMainPain(list,x,y));
         Scene scene = new Scene(pane);
         primaryStage.setScene(scene);
@@ -64,7 +60,7 @@ public final class App extends Application {
         }
         try {
             Data dataObject = converter.read(file);
-            StackPane pane = new StackPane(MainPain.createMainPain(dataObject.getListVariables(),xAxis,yAxis));
+            StackPane pane = new StackPane(MainPain.createMainPain(dataObject.getListVariables(),0,1));
             Scene scene = new Scene(pane);
             stage.setScene(scene);
             stage.setTitle(dataObject.getDataName());

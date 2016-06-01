@@ -25,14 +25,14 @@ import static ch.fhnw.project.App.*;
  */
 public class MainPain {
 
-    public static Pane createMainPain(List<Variables> variablesList, IntegerProperty x, IntegerProperty y) {
 
-        x = xAxis;
-        y = yAxis;
+
+    public static Pane createMainPain(List<Variables> variablesList, int x, int y) {
+
 
         List<Variables> plotVariables = new ArrayList<>();
-        plotVariables.add(variablesList.get(x.getValue()));
-        plotVariables.add(variablesList.get(y.getValue()));
+        plotVariables.add(variablesList.get(x));
+        plotVariables.add(variablesList.get(y));
 
 
         ComboBox<String> cbXAxis = getChoiceBox(variablesList);
@@ -41,17 +41,9 @@ public class MainPain {
         ComboBox<String> cbYAxis = getChoiceBox(variablesList);
         cbYAxis.setValue(plotVariables.get(1).getName());
         Label labelYAxis = new Label("y-Axis:");
-        ComboBox<String> cbZAxis = getChoiceBox(variablesList);
-        Label labelZAxis = new Label ("z-Axis");
-        cbZAxis.setValue(plotVariables.get(0).getName());
-        CheckBox bubblePlot = new CheckBox("Bubble-Plot");
-        cbZAxis.setDisable(bubblePlotCheckbox.getValue());
-        bubblePlot.setSelected(!bubblePlotCheckbox.getValue());
-        if (variablesList.size()>2){
-            plotVariables.add(variablesList.get(zAxis.getValue()));
-            cbZAxis.setValue(plotVariables.get(2).getName());
-        }
 
+        //int xAxis = (int) cbXAxis.getSelectionModel().selectedIndexProperty().getValue();
+        //int yAxis = (int) cbYAxis.getSelectionModel().selectedIndexProperty().getValue();
 
         //plotVariables.add(variablesList.get(cbXAxis.getSelectionModel().selectedIndexProperty().getValue()));
         //plotVariables.add(variablesList.get(cbYAxis.getSelectionModel().selectedIndexProperty().getValue()));
@@ -60,56 +52,32 @@ public class MainPain {
         cbXAxis.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                xAxis.setValue(newValue);
                 //System.out.println("VariableName: "+plotVariables.get(0).getName());
                 //System.out.println("newValue: "+newValue);
-                App.cleanup(variablesList,xAxis,yAxis);
+                App.cleanup(variablesList,(int) newValue,(int) cbYAxis.getSelectionModel().selectedIndexProperty().getValue());
             }
         });
         cbYAxis.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                yAxis.setValue(newValue);
                 //System.out.println("VariableName: "+plotVariables.get(0).getName());
                 //System.out.println("newValue: "+newValue);
-                App.cleanup(variablesList, xAxis, yAxis);
+                App.cleanup(variablesList, (int) cbXAxis.getSelectionModel().selectedIndexProperty().getValue(), (int) newValue);
 
 
             }
         });
 
-        cbZAxis.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                zAxis.setValue(newValue);
-                App.cleanup(variablesList,xAxis,yAxis);
-            }
-        });
-
-        bubblePlot.selectedProperty().addListener(new ChangeListener<Boolean>() {
-            @Override
-            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                if (newValue){
-                    bubblePlotCheckbox.setValue(false);
-                    cbZAxis.setDisable(bubblePlotCheckbox.getValue());
-                    App.cleanup(variablesList,xAxis,yAxis);
-                }else{
-                    bubblePlotCheckbox.setValue(true);
-                    cbZAxis.setDisable(bubblePlotCheckbox.getValue());
-                    App.cleanup(variablesList,xAxis,yAxis);
-                }
-            }
-        });
 
 
 
-        Pane scatterPane = ScatterPlot.createScatterPane(variablesList,x,y);
+
+
+
+        Pane scatterPane = ScatterPlot.createScatterPane(variablesList,(int) cbXAxis.getSelectionModel().selectedIndexProperty().getValue(),(int) cbYAxis.getSelectionModel().selectedIndexProperty().getValue());
 
         HBox choicePain = new HBox();
         choicePain.getChildren().addAll(labelXAxis,cbXAxis,labelYAxis,cbYAxis);
-        if (variablesList.size()>2){
-            choicePain.getChildren().addAll(labelZAxis,cbZAxis,bubblePlot);
-        }
         choicePain.setAlignment(Pos.CENTER);
         choicePain.setSpacing(10);
         choicePain.setStyle("-fx-background-color: yellow;");
@@ -123,7 +91,7 @@ public class MainPain {
         */
 
         VBox mainHBox = new VBox();
-        mainHBox.getChildren().addAll(choicePain,scatterPane, Histogram.createHistogram(variablesList, xAxis, yAxis));
+        mainHBox.getChildren().addAll(choicePain,scatterPane, Histogram.createHistogram(variablesList, (int) cbXAxis.getSelectionModel().selectedIndexProperty().getValue(), (int) cbYAxis.getSelectionModel().selectedIndexProperty().getValue()));
         mainHBox.setPadding(new Insets(5, 5, 5, 5));
         mainHBox.setSpacing(10);
 
@@ -136,7 +104,7 @@ public class MainPain {
 
 
 
-    private static ComboBox<String> getChoiceBox(List<Variables> variableList) {
+    public static ComboBox<String> getChoiceBox(List<Variables> variableList) {
         ComboBox<String> choiceBox = new ComboBox<>();
         for(int i = 0; i <= variableList.size()-1; i++) {
             choiceBox.getItems().add(variableList.get(i).getName());
