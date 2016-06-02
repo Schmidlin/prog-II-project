@@ -136,7 +136,8 @@ class ScatterPlot {
 
             if (bubblePlot.isSelected()) {
                 Double r = Collections.max(variableList.get(cbZAxis.getSelectionModel().selectedIndexProperty().getValue()).getValues())-Collections.min(variableList.get(cbZAxis.getSelectionModel().selectedIndexProperty().getValue()).getValues());
-                if(r<1.0){r=1.0;}
+                //Double rMax = Collections.max(variableList.get(cbZAxis.getSelectionModel().selectedIndexProperty().getValue()).getValues());
+                if(r==0){r=1.0;}
                 circle.radiusProperty().bind(pointSizeSlider.valueProperty().multiply((variableList.get(cbZAxis.getSelectionModel().selectedIndexProperty().getValue()).getValues().get(i)) / r));
             } else {
                 circle.radiusProperty().bind(pointSizeSlider.valueProperty());
