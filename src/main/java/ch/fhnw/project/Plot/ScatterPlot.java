@@ -39,8 +39,12 @@ public class ScatterPlot {
     static ComboBox<String> cbZAxis;
     static CheckBox bubblePlot = new CheckBox("Bubble-Plot");
     static Label labelZAxis = new Label ("z-Axis");
-
-
+    static HBox firstLine = new HBox();
+    static HBox secondLine = new HBox();
+    static StackPane scatterPane = new StackPane();
+    static VBox overAllBox =new VBox();
+    static ScatterChart<Number, Number> sc;
+    static  LineChart<Number,Number> lc;
 
 
     public static Pane createScatterPane(List<Variables> variableList, int x, int y) {
@@ -54,9 +58,13 @@ public class ScatterPlot {
         testList.add(variableList.get(y));
 
         cbZAxis = MainPain.getChoiceBox(variableList);
-        cbZAxis.setValue(testList.get(0).getName());
+        if(cbZAxis.getValue()==null){
+            cbZAxis.setValue(testList.get(0).getName());
+        }
+
         cbZAxis.setDisable(!bubblePlot.isSelected());
         bubblePlot.setSelected(bubblePlot.isSelected());
+
 
         if (variableList.size()>2) {
             testList.add(variableList.get(cbZAxis.getSelectionModel().selectedIndexProperty().getValue()));
@@ -69,14 +77,14 @@ public class ScatterPlot {
 ;
 
         //create Pane
-        ScatterChart<Number, Number> sc = getsc(testList,-1);
-        sc.lookup(".chart-plot-background").setStyle("-fx-background-color: transparent");
-        if (bubblePlot.isSelected()){
-            sc = getsc(testList,cbZAxis.getSelectionModel().selectedIndexProperty().getValue() );
-            }
+        sc = getsc(variableList,x,y);
 
-        LineChart<Number,Number> lc = getlc(testList);;
-        lc.setVisible(false);
+        sc = getsc(variableList,x,y);
+
+
+        lc = getlc(testList);;
+        if(!timeLine.isSelected()){
+            lc.setVisible(false);}
         //Checkbox commands
         timeLine.selectedProperty().addListener(new ChangeListener<Boolean>(){
 
@@ -91,35 +99,41 @@ public class ScatterPlot {
             }
         });
 
-        pointSizeSlider.valueProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-            }
-        });
 
         bubblePlot.selectedProperty().addListener(new ChangeListener<Boolean>() {
             @Override
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
                 if (newValue){
-                    //bubblePlot.setSelected(false);
                     cbZAxis.setDisable(!newValue);
-                    //App.cleanup(variablesList,(int) cbXAxis.getSelectionModel().selectedIndexProperty().getValue(),(int) cbYAxis.getSelectionModel().selectedIndexProperty().getValue());
+                    //sc = getsc(variableList,x,y);
                 }else{
-                    //bubblePlot.setSelected(true);
                     cbZAxis.setDisable(!newValue);
-                    //App.cleanup(variablesList,(int) cbXAxis.getSelectionModel().selectedIndexProperty().getValue(),(int) cbYAxis.getSelectionModel().selectedIndexProperty().getValue());
+                    //sc = getsc(variableList,x,y);
                 }
             }
         });
 
+        cbZAxis.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                sc = getsc(variableList,x,y);
+                scatterPane.getChildren().clear();
+                scatterPane.getChildren().addAll(lc,sc);
+                scatterPane.setAlignment(Pos.CENTER);
+
+            }
+        });
+
+
 
         //style pane
-        HBox firstLine = new HBox();
+        firstLine.getChildren().clear();
         firstLine.getChildren().addAll(pointSizeSliderLabel,pointSizeSlider);
         firstLine.setAlignment(Pos.CENTER);
         firstLine.setPadding(new Insets(5,5,5,5));
 
-        HBox secondLine = new HBox();
+
+        secondLine.getChildren().clear();
         if (variableList.size()>2){
             secondLine.getChildren().addAll(labelZAxis,cbZAxis,bubblePlot);
         }
@@ -128,12 +142,12 @@ public class ScatterPlot {
         secondLine.setSpacing(10);
         secondLine.setPadding(new Insets(5,5,5,5));
 
-        StackPane scatterPane = new StackPane();
+        scatterPane.getChildren().clear();
         scatterPane.getChildren().addAll(lc,sc);
         scatterPane.setAlignment(Pos.CENTER);
         //scatterPane.setMaxWidth(600);
 
-        VBox overAllBox =new VBox();
+        overAllBox.getChildren().clear();
         overAllBox.getChildren().addAll(firstLine,secondLine,scatterPane);
         overAllBox.setAlignment(Pos.CENTER);
         overAllBox.setSpacing(10);
@@ -159,21 +173,18 @@ public class ScatterPlot {
         return testList;
     }
 
-    private static ScatterChart<Number,Number> getsc(List<Variables> variablesList, int z){
+    private static ScatterChart<Number,Number> getsc(List<Variables> variablesList,int x, int y){
         NumberAxis scXAxis = new NumberAxis ();
         NumberAxis scYAxis = new NumberAxis();
-        List<Variables> testList = new ArrayList<>();
-        testList.add(variablesList.get(0));
-        testList.add(variablesList.get(1));
-        scXAxis.setLabel(testList.get(0).getName());
-        scYAxis.setLabel(testList.get(1).getName());
+        scXAxis.setLabel(variablesList.get(x).getName());
+        scYAxis.setLabel(variablesList.get(y).getName());
         scXAxis.setForceZeroInRange(false);
         scYAxis.setForceZeroInRange(false);
         ScatterChart<Number,Number> sc = new ScatterChart<>(scXAxis, scYAxis);
 
         List<Double> a,b;
-        a = testList.get(0).getValues();
-        b = testList.get(1).getValues();
+        a = variablesList.get(x).getValues();
+        b = variablesList.get(y).getValues();
 
         XYChart.Series data1 = new XYChart.Series();
 
@@ -181,9 +192,10 @@ public class ScatterPlot {
             XYChart.Data<Number, Number> point = new XYChart.Data<>(a.get(i),b.get(i));
             Circle circle = new Circle();
             circle.fillProperty().bind(cP.valueProperty());
-            double x = 0;
-            if (z != -1){
-                circle.radiusProperty().bind(pointSizeSlider.valueProperty().multiply((variablesList.get(cbZAxis.getSelectionModel().selectedIndexProperty().getValue()).getValues().get(i))/x));
+
+            if (bubblePlot.isSelected()){
+                circle.radiusProperty().bind(pointSizeSlider.valueProperty().multiply((variablesList.get(cbZAxis.getSelectionModel().selectedIndexProperty().getValue()).getValues().get(i))/100));
+                //circle.radiusProperty().bindBidirectional(bubblePlot);
             }else{
                 circle.radiusProperty().bind(pointSizeSlider.valueProperty());
             }
@@ -192,6 +204,7 @@ public class ScatterPlot {
         }
         sc.getData().add(data1);
         sc.setLegendVisible(false);
+        sc.lookup(".chart-plot-background").setStyle("-fx-background-color: transparent");
 
         return sc;
     }
@@ -200,6 +213,8 @@ public class ScatterPlot {
 
         NumberAxis xAxis = new NumberAxis();
         NumberAxis yAxis = new NumberAxis();
+        xAxis.setForceZeroInRange(false);
+        yAxis.setForceZeroInRange(false);
         xAxis.setLabel(" ");
         yAxis.setLabel(" ");
         LineChart<Number, Number> lc = new LineChart<>(xAxis, yAxis);

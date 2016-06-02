@@ -19,7 +19,6 @@ import java.util.List;
 
 public final class App extends Application {
 
-    public static Stage primaryStage;
     public static File fileChoose() {
 
 
@@ -40,11 +39,7 @@ public final class App extends Application {
         launch(args);
     }
 
-    public static void cleanup(List<Variables> list,int x, int y){
-        StackPane pane = new StackPane(MainPain.createMainPain(list,x,y));
-        Scene scene = new Scene(pane);
-        primaryStage.setScene(scene);
-    }
+
 
     @Override
     public void start(Stage stage) {
@@ -60,11 +55,10 @@ public final class App extends Application {
         }
         try {
             Data dataObject = converter.read(file);
-            StackPane pane = new StackPane(MainPain.createMainPain(dataObject.getListVariables(),0,1));
+            StackPane pane = new StackPane(MainPain.createMainPain(dataObject.getListVariables()));
             Scene scene = new Scene(pane);
             stage.setScene(scene);
             stage.setTitle(dataObject.getDataName());
-            primaryStage = stage;
             stage.show();
 
         } catch (IOException e){

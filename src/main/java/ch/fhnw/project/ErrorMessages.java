@@ -6,10 +6,11 @@ import static javafx.application.Platform.exit;
 
 /**
  * Created by fabienne on 25.05.16.
+ * Error Messages
  */
-public class ErrorMessages {
+class ErrorMessages {
 
-    public static void ioexception(){
+     static void ioexception(){
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("IOException");
         String s = "No such file or directory. Start application again.";

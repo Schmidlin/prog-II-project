@@ -24,59 +24,56 @@ import static ch.fhnw.project.App.*;
  * Created by thomasschmidlin on 04.05.16.
  */
 public class MainPain {
+    static HBox choicePain = new HBox();
+    static ComboBox<String> cbXAxis;
+    static ComboBox<String> cbYAxis;
+    static VBox mainHBox = new VBox();
+    static Pane scatterPane;
+    static Pane histogram;
 
 
 
-    public static Pane createMainPain(List<Variables> variablesList, int x, int y) {
+    public static Pane createMainPain(List<Variables> variableList) {
 
-
-        List<Variables> plotVariables = new ArrayList<>();
-        plotVariables.add(variablesList.get(x));
-        plotVariables.add(variablesList.get(y));
-
-
-        ComboBox<String> cbXAxis = getChoiceBox(variablesList);
-        cbXAxis.setValue(plotVariables.get(0).getName());
+        cbXAxis = getChoiceBox(variableList);
+        cbXAxis.setValue(variableList.get(0).getName());
         Label labelXAxis = new Label("x-Axis:");
-        ComboBox<String> cbYAxis = getChoiceBox(variablesList);
-        cbYAxis.setValue(plotVariables.get(1).getName());
+        cbYAxis = getChoiceBox(variableList);
+        cbYAxis.setValue(variableList.get(1).getName());
         Label labelYAxis = new Label("y-Axis:");
 
         //int xAxis = (int) cbXAxis.getSelectionModel().selectedIndexProperty().getValue();
         //int yAxis = (int) cbYAxis.getSelectionModel().selectedIndexProperty().getValue();
 
-        //plotVariables.add(variablesList.get(cbXAxis.getSelectionModel().selectedIndexProperty().getValue()));
-        //plotVariables.add(variablesList.get(cbYAxis.getSelectionModel().selectedIndexProperty().getValue()));
+        //plotVariables.add(variableList.get(cbXAxis.getSelectionModel().selectedIndexProperty().getValue()));
+        //plotVariables.add(variableList.get(cbYAxis.getSelectionModel().selectedIndexProperty().getValue()));
 
 
         cbXAxis.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                //System.out.println("VariableName: "+plotVariables.get(0).getName());
-                //System.out.println("newValue: "+newValue);
-                App.cleanup(variablesList,(int) newValue,(int) cbYAxis.getSelectionModel().selectedIndexProperty().getValue());
+                cbXAxis.setValue(variableList.get((int) newValue).getName());
+                scatterPane = ScatterPlot.createScatterPane(variableList, (int) newValue, cbYAxis.getSelectionModel().getSelectedIndex());
+                histogram = Histogram.createHistogram(variableList,(int) newValue,cbYAxis.getSelectionModel().getSelectedIndex());
             }
         });
         cbYAxis.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                //System.out.println("VariableName: "+plotVariables.get(0).getName());
-                //System.out.println("newValue: "+newValue);
-                App.cleanup(variablesList, (int) cbXAxis.getSelectionModel().selectedIndexProperty().getValue(), (int) newValue);
-
+                cbYAxis.setValue(variableList.get((int)newValue).getName());
+                scatterPane = ScatterPlot.createScatterPane(variableList, (int) cbXAxis.getSelectionModel().getSelectedIndex(), (int) newValue);
+                histogram = Histogram.createHistogram(variableList,(int) cbXAxis.getSelectionModel().getSelectedIndex() ,(int) newValue);
 
             }
         });
 
 
 
+        scatterPane = ScatterPlot.createScatterPane(variableList,(int) cbXAxis.getSelectionModel().selectedIndexProperty().getValue(),(int) cbYAxis.getSelectionModel().selectedIndexProperty().getValue());
+        histogram = Histogram.createHistogram(variableList, (int) cbXAxis.getSelectionModel().selectedIndexProperty().getValue(), (int) cbYAxis.getSelectionModel().selectedIndexProperty().getValue());
 
 
 
-
-        Pane scatterPane = ScatterPlot.createScatterPane(variablesList,(int) cbXAxis.getSelectionModel().selectedIndexProperty().getValue(),(int) cbYAxis.getSelectionModel().selectedIndexProperty().getValue());
-
-        HBox choicePain = new HBox();
         choicePain.getChildren().addAll(labelXAxis,cbXAxis,labelYAxis,cbYAxis);
         choicePain.setAlignment(Pos.CENTER);
         choicePain.setSpacing(10);
@@ -90,8 +87,8 @@ public class MainPain {
         histogramm.setPadding(new Insets(5, 5, 5, 5));
         */
 
-        VBox mainHBox = new VBox();
-        mainHBox.getChildren().addAll(choicePain,scatterPane, Histogram.createHistogram(variablesList, (int) cbXAxis.getSelectionModel().selectedIndexProperty().getValue(), (int) cbYAxis.getSelectionModel().selectedIndexProperty().getValue()));
+
+        mainHBox.getChildren().addAll(choicePain,scatterPane, histogram);
         mainHBox.setPadding(new Insets(5, 5, 5, 5));
         mainHBox.setSpacing(10);
 

@@ -17,8 +17,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static ch.fhnw.project.App.xAxis;
-import static ch.fhnw.project.App.yAxis;
+
 import static java.lang.Math.round;
 
 
@@ -27,6 +26,11 @@ import static java.lang.Math.round;
  */
 public class Histogram {
 
+    static VBox left = new VBox();
+    static VBox right = new VBox();
+    static HBox HBox = new HBox();
+    static StackPane pane = new StackPane();
+
     public static Pane createHistogram(List<Variables> variableList, int x, int y) {
 
 
@@ -34,26 +38,25 @@ public class Histogram {
         testList.add(variableList.get(x));
         testList.add(variableList.get(y));
 
-
-        VBox left = new VBox();
+        left.getChildren().clear();
         left.getChildren().addAll(createBarChart(testList,0));
         left.setAlignment(Pos.CENTER);
         left.setSpacing(10);
         left.setPadding(new Insets(5,5,5,5));
 
-        VBox right = new VBox();
+        right.getChildren().clear();
         right.getChildren().addAll(createBarChart(testList,1));
         right.setAlignment(Pos.CENTER);
         right.setSpacing(10);
         right.setPadding(new Insets(5,5,5,5));
 
-        HBox HBox = new HBox();
+        HBox.getChildren().clear();
         HBox.getChildren().addAll(left,right);
         HBox.setAlignment(Pos.CENTER);
         HBox.setSpacing(20);
         HBox.setPadding(new Insets(5,5,5,5));
 
-        StackPane pane = new StackPane();
+        pane.getChildren().clear();
         pane.getChildren().add(HBox);
 
         return pane;
