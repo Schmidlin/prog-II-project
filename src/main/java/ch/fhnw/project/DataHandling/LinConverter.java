@@ -12,8 +12,9 @@ import java.util.List;
 
 /**
  * Created by fabienne on 25.05.16.
+ * Data Converter for .lin documents
  */
-public class LinConverter implements DataConverter{
+public class LinConverter implements DataConverter {
 
     public Data read(File file) throws IOException {
         List<Variables> finalList = new ArrayList<>();
@@ -21,30 +22,28 @@ public class LinConverter implements DataConverter{
         BufferedReader in = new BufferedReader(new FileReader(file.toString()));
         String firstLine = in.readLine();
         String[] variableNames = new String[Integer.parseInt(firstLine)];
-        List<List<Double>> variableValues = new ArrayList<List<Double>>();
+        List<List<Double>> variableValues = new ArrayList<>();
         String line;
         String[] linesplit;
 
-
         for (int i = 0; i < Integer.parseInt(firstLine); i++) {
             variableNames[i] = in.readLine();
-            variableValues.add(new ArrayList<Double>());
+            variableValues.add(new ArrayList<>());
         }
         in.readLine();
 
         for (int i = 0; i < Integer.parseInt(firstLine); i++) {
             line = in.readLine();
             linesplit = line.split(";");
-            for (int r = 0; r < linesplit.length; r++) {
-                variableValues.get(i).add(Double.parseDouble(linesplit[r]));
+            for (String aLinesplit : linesplit) {
+                variableValues.get(i).add(Double.parseDouble(aLinesplit));
             }
         }
         for (int i = 0; i < Integer.parseInt(firstLine); i++) {
             finalList.add(new Variables(variableNames[i], variableValues.get(i)));
         }
 
-        return new Data(file.getName(),finalList);
-
+        return new Data(file.getName(), finalList);
     }
 
 }

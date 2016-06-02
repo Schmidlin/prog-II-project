@@ -5,21 +5,22 @@ import java.util.List;
 
 /**
  * Created by fabienne on 06.05.16.
+ * Class for Variable
  */
-public  class Variables {
-    private  String name;
+public class Variables {
+    private String name;
     private List<Double> values;
 
-    public Variables(String name, List<Double> values){
+    public Variables(String name, List<Double> values) {
         this.name = name;
         this.values = values;
     }
 
-    public String getName(){
+    public String getName() {
         return name;
     }
 
-    public List<Double> getValues(){
+    public List<Double> getValues() {
         return values;
     }
 

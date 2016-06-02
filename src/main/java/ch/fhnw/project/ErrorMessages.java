@@ -10,7 +10,7 @@ import static javafx.application.Platform.exit;
  */
 class ErrorMessages {
 
-     static void ioexception(){
+    static void ioexception() {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("IOException");
         String s = "No such file or directory. Start application again.";

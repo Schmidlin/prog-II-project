@@ -1,12 +1,14 @@
 package ch.fhnw.project.DataHandling;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
 
 /**
  * Created by fabienne on 16.05.16.
+ * Interface DataConverter
  */
 public interface DataConverter {
 
-    public Data read(File file)throws IOException;
+    Data read(File file) throws IOException;
 
 }
